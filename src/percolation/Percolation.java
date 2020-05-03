@@ -78,7 +78,9 @@ public class Percolation {
   public boolean percolates(){
     int connection = 0;
     for(int i=0; i<sizeOfGrid; i++){
-      if(grid[currentRow][currentCol] == grid[i][sizeOfGrid-1] && grid[currentRow][currentCol] != -1 && isFull(currentRow,currentCol)){
+      if(isFull(sizeOfGrid-1,i) && grid[sizeOfGrid-1][i] != -1){
+        System.out.println("size" + sizeOfGrid);
+        System.out.println("I" + i);
         connection+=1;
       }
     }

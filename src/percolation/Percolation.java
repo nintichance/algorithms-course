@@ -1,12 +1,10 @@
 package percolation;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-import javax.annotation.processing.SupportedSourceVersion;
-
 public class Percolation {
-  private static int[][] grid;
+  public static int[][] grid;
   static int sizeOfGrid;
-  static int numOfOpenSites;
+  public int numOfOpenSites;
   private WeightedQuickUnionUF weightedQuickUnionUF;
   private int currentRow;
   private int currentCol;
@@ -65,29 +63,27 @@ public class Percolation {
   // is the site (row, col) full?
   public boolean isFull(int row, int col){
     int connection = 0;
-     for(int i=0; i<sizeOfGrid; i++){
+    for(int i=0; i<sizeOfGrid; i++){
       if(grid[currentRow][currentCol] == grid[0][i]){
         connection+=1;
       }
-     }
-     if(connection>0){
-       return true;
-     }else{
-       return false;
-     }
+    }
+    if(connection>0){
+      return true;
+    }else{
+      return false;
+    }
   }
-
-  // returns the number of open sites
-  public int numberOfOpenSites(){
-    return numOfOpenSites;
-  }
-
 
   public boolean percolates(){
-    if(currentRow == sizeOfGrid-1){
-      System.out.println("GETS HERE");
-      boolean isPercolated = isFull(currentRow, currentCol);
-      return isPercolated;
+    int connection = 0;
+    for(int i=0; i<sizeOfGrid; i++){
+      if(grid[currentRow][currentCol] == grid[i][sizeOfGrid-1] && grid[currentRow][currentCol] != -1 && isFull(currentRow,currentCol)){
+        connection+=1;
+      }
+    }
+    if(connection>0){
+      return true;
     }else{
       return false;
     }
@@ -151,61 +147,6 @@ public class Percolation {
       connectOpenAdjacents(row, (col + 1), p);
     }
   }
-
-//  private static void printStatements(){
-//    System.out.println("0---[0][0]:" + grid[0][0]);
-//    System.out.println("1---[0][1]:" + grid[0][1]);
-//    System.out.println("2---[0][2]:" + grid[0][2]);
-//    System.out.println("3---[1][0]:" + grid[1][0]);
-//    System.out.println("4---[1][1]:" + grid[1][1]);
-//    System.out.println("5---[1][2]:" + grid[1][2]);
-//    System.out.println("6---[2][0]:" + grid[2][0]);
-//    System.out.println("7---[2][1]:" + grid[2][1]);
-//    System.out.println("8---grid[2][2]:" + grid[2][2]);
-//  }
-//  // test client (optional)
-//  public static void main(String[] args){
-//    Percolation perc = new Percolation(3);
-//    perc.open(0,0);
-//
-//    System.out.println("ONE");
-//    System.out.println(perc.percolates());
-//    perc.open(2,2);
-//    printStatements();
-//    System.out.println(perc.percolates());
-//    System.out.println("TWO");
-//    perc.open(1,0);
-//    printStatements();
-//    System.out.println(perc.percolates());
-//    System.out.println("THREE");
-//    perc.open(2,1);
-//    printStatements();
-//    System.out.println(perc.percolates());
-//    System.out.println("FOUR");
-//    perc.open(0,2);
-//    printStatements();
-//    System.out.println(perc.percolates());
-//    System.out.println("FIVE");
-//    perc.open(2,0);
-//    printStatements();
-//    System.out.println(perc.percolates());
-//    System.out.println("SIX");
-//    perc.open(0,1);
-//    printStatements();
-//    System.out.println(perc.percolates());
-//    System.out.println("SEVEN");
-//    perc.open(1,2);
-//    printStatements();
-//    System.out.println(perc.percolates());
-//    System.out.println("EIGHT");
-//    perc.open(1,1);
-//    printStatements();
-//    System.out.println(perc.percolates());
-//    System.out.println("NINE");
-//    printStatements();
-//
-//  }
-
 }
 
 

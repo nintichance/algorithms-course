@@ -1,47 +1,43 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import percolation.Percolation;
-import java.util.ArrayList;
-import java.util.function.ToDoubleFunction;
 
 public class PercolationStats {
-
-    private double totalNumOfSites;
-    private int totalTrials;
-    public double[] collectionOfTrials;
+    final private int totalTrials;
+    final private double[] collectionOfTrials;
     private Percolation percolation;
 
-    //need to run the percolation method until the system percolates CHECK
-    //when the system percolates, I need to return the ratio of open sites to total number of sites
-    //after N amount of trials has been run, find the average ratio of open sites to total number of sites
-
     // perform independent trials on an n-by-n grid
-    public PercolationStats(int n, int trials){
+    public PercolationStats(int n, int trials) {
         totalTrials = trials;
+        final double totalNumOfSites;
         totalNumOfSites = n*n;
         collectionOfTrials = new double[totalTrials];
 
-        for(int i=0;i<totalTrials;i++){
+        for (int i=0;i<totalTrials;i++) {
             percolation = new Percolation(n);
-            callPercolation(n, i);
+            callPercolation(n);
             double ratioOfSites = 0;
-            if(percolation.percolates() == true){
-                ratioOfSites = percolation.numOfOpenSites/totalNumOfSites;
+            if (percolation.percolates() == true) {
+                ratioOfSites = percolation.numberOfOpenSites()/totalNumOfSites;
                 collectionOfTrials[i] = ratioOfSites;
             }
         }
     }
 
 //         test client (see below)
-    public static void main(String[] args){
-        PercolationStats percolationStats = new PercolationStats(100, 1000);
+    public static void main(String[] args) {
+        PercolationStats percolationStats = new PercolationStats(10, 100);
         System.out.println(percolationStats.mean());
+        System.out.println(percolationStats.stddev());
+        System.out.println(percolationStats.confidenceHi());
+        System.out.println(percolationStats.confidenceLo());
         percolationStats.mean();
     }
 
-    private void callPercolation(int n, int i){
-        while(percolation.percolates() != true){
-            percolation.open(StdRandom.uniform(n), StdRandom.uniform(n));
+
+    private void callPercolation(int n) {
+        while (percolation.percolates() != true) {
+            percolation.open(StdRandom.uniform(1, n + 1), StdRandom.uniform(1, n + 1));
         }
     }
 
@@ -54,119 +50,19 @@ public class PercolationStats {
     public double stddev(){
        return StdStats.stddev(collectionOfTrials);
     }
-//
-//    // low endpoint of 95% confidence interval
-//    public double confidenceLo()
-//
-//    // high endpoint of 95% confidence interval
-//    public double confidenceHi()
-//
 
-//     test client (optional)
-//
-//    public static void main(String[] args){
-//        Percolation perc = new Percolation(3);
-//        perc.open(StdRandom.uniform(3), StdRandom.uniform(3));
-//
-//        System.out.println("ONE");
-//        System.out.println(perc.percolates());
-//        perc.open(StdRandom.uniform(3), StdRandom.uniform(3));
-//        System.out.println("0---[0][0]:" + perc.grid[0][0]);
-//        System.out.println("1---[0][1]:" + perc.grid[0][1]);
-//        System.out.println("2---[0][2]:" + perc.grid[0][2]);
-//        System.out.println("3---[1][0]:" + perc.grid[1][0]);
-//        System.out.println("4---[1][1]:" + perc.grid[1][1]);
-//        System.out.println("5---[1][2]:" + perc.grid[1][2]);
-//        System.out.println("6---[2][0]:" + perc.grid[2][0]);
-//        System.out.println("7---[2][1]:" + perc.grid[2][1]);
-//        System.out.println("8---grid[2][2]:" + perc.grid[2][2]);
-//        System.out.println(perc.percolates());
-//        System.out.println("TWO");
-//        perc.open(StdRandom.uniform(3), StdRandom.uniform(3));
-//        System.out.println("0---[0][0]:" + perc.grid[0][0]);
-//        System.out.println("1---[0][1]:" + perc.grid[0][1]);
-//        System.out.println("2---[0][2]:" + perc.grid[0][2]);
-//        System.out.println("3---[1][0]:" + perc.grid[1][0]);
-//        System.out.println("4---[1][1]:" + perc.grid[1][1]);
-//        System.out.println("5---[1][2]:" + perc.grid[1][2]);
-//        System.out.println("6---[2][0]:" + perc.grid[2][0]);
-//        System.out.println("7---[2][1]:" + perc.grid[2][1]);
-//        System.out.println("8---grid[2][2]:" + perc.grid[2][2]);
-//        System.out.println(perc.percolates());
-//        System.out.println("THREE");
-//        perc.open(StdRandom.uniform(3), StdRandom.uniform(3));
-//        System.out.println("0---[0][0]:" + perc.grid[0][0]);
-//        System.out.println("1---[0][1]:" + perc.grid[0][1]);
-//        System.out.println("2---[0][2]:" + perc.grid[0][2]);
-//        System.out.println("3---[1][0]:" + perc.grid[1][0]);
-//        System.out.println("4---[1][1]:" + perc.grid[1][1]);
-//        System.out.println("5---[1][2]:" + perc.grid[1][2]);
-//        System.out.println("6---[2][0]:" + perc.grid[2][0]);
-//        System.out.println("7---[2][1]:" + perc.grid[2][1]);
-//        System.out.println("8---grid[2][2]:" + perc.grid[2][2]);
-//        System.out.println(perc.percolates());
-//        System.out.println("FOUR");
-//        perc.open(StdRandom.uniform(3), StdRandom.uniform(3));
-//        System.out.println("0---[0][0]:" + perc.grid[0][0]);
-//        System.out.println("1---[0][1]:" + perc.grid[0][1]);
-//        System.out.println("2---[0][2]:" + perc.grid[0][2]);
-//        System.out.println("3---[1][0]:" + perc.grid[1][0]);
-//        System.out.println("4---[1][1]:" + perc.grid[1][1]);
-//        System.out.println("5---[1][2]:" + perc.grid[1][2]);
-//        System.out.println("6---[2][0]:" + perc.grid[2][0]);
-//        System.out.println("7---[2][1]:" + perc.grid[2][1]);
-//        System.out.println("8---grid[2][2]:" + perc.grid[2][2]);
-//        System.out.println(perc.percolates());
-//        System.out.println("FIVE");
-//        perc.open(StdRandom.uniform(3), StdRandom.uniform(3));
-//        System.out.println("0---[0][0]:" + perc.grid[0][0]);
-//        System.out.println("1---[0][1]:" + perc.grid[0][1]);
-//        System.out.println("2---[0][2]:" + perc.grid[0][2]);
-//        System.out.println("3---[1][0]:" + perc.grid[1][0]);
-//        System.out.println("4---[1][1]:" + perc.grid[1][1]);
-//        System.out.println("5---[1][2]:" + perc.grid[1][2]);
-//        System.out.println("6---[2][0]:" + perc.grid[2][0]);
-//        System.out.println("7---[2][1]:" + perc.grid[2][1]);
-//        System.out.println("8---grid[2][2]:" + perc.grid[2][2]);
-//        System.out.println(perc.percolates());
-//        System.out.println("SIX");
-//        perc.open(StdRandom.uniform(3), StdRandom.uniform(3));
-//        System.out.println("0---[0][0]:" + perc.grid[0][0]);
-//        System.out.println("1---[0][1]:" + perc.grid[0][1]);
-//        System.out.println("2---[0][2]:" + perc.grid[0][2]);
-//        System.out.println("3---[1][0]:" + perc.grid[1][0]);
-//        System.out.println("4---[1][1]:" + perc.grid[1][1]);
-//        System.out.println("5---[1][2]:" + perc.grid[1][2]);
-//        System.out.println("6---[2][0]:" + perc.grid[2][0]);
-//        System.out.println("7---[2][1]:" + perc.grid[2][1]);
-//        System.out.println("8---grid[2][2]:" + perc.grid[2][2]);
-//        System.out.println(perc.percolates());
-//        System.out.println("SEVEN");
-//        perc.open(StdRandom.uniform(3), StdRandom.uniform(3));
-//        System.out.println("0---[0][0]:" + perc.grid[0][0]);
-//        System.out.println("1---[0][1]:" + perc.grid[0][1]);
-//        System.out.println("2---[0][2]:" + perc.grid[0][2]);
-//        System.out.println("3---[1][0]:" + perc.grid[1][0]);
-//        System.out.println("4---[1][1]:" + perc.grid[1][1]);
-//        System.out.println("5---[1][2]:" + perc.grid[1][2]);
-//        System.out.println("6---[2][0]:" + perc.grid[2][0]);
-//        System.out.println("7---[2][1]:" + perc.grid[2][1]);
-//        System.out.println("8---grid[2][2]:" + perc.grid[2][2]);
-//        System.out.println(perc.percolates());
-//        System.out.println("EIGHT");
-//        perc.open(StdRandom.uniform(3), StdRandom.uniform(3));
-//        System.out.println("0---[0][0]:" + perc.grid[0][0]);
-//        System.out.println("1---[0][1]:" + perc.grid[0][1]);
-//        System.out.println("2---[0][2]:" + perc.grid[0][2]);
-//        System.out.println("3---[1][0]:" + perc.grid[1][0]);
-//        System.out.println("4---[1][1]:" + perc.grid[1][1]);
-//        System.out.println("5---[1][2]:" + perc.grid[1][2]);
-//        System.out.println("6---[2][0]:" + perc.grid[2][0]);
-//        System.out.println("7---[2][1]:" + perc.grid[2][1]);
-//        System.out.println("8---grid[2][2]:" + perc.grid[2][2]);
-//        System.out.println(perc.percolates());
-//        System.out.println("NINE");
-//    }
+    // low  endpoint of 95% confidence interval
+    public double confidenceLo() {
+        return (mean() - 1.96 * Math.sqrt(squaredStddev() / totalTrials));
+    }
 
+    // high endpoint of 95% confidence interval
+    public double confidenceHi() {
+        return (mean() + 1.96 * Math.sqrt(squaredStddev() / totalTrials));
+    }
+
+    private double squaredStddev(){
+        return stddev() * stddev();
+    }
 
 }

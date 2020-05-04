@@ -19,48 +19,34 @@ public class PercolationStats {
     public PercolationStats(int n, int trials){
         totalTrials = trials;
         totalNumOfSites = n*n;
+        collectionOfTrials = new double[totalTrials];
+
         for(int i=0;i<totalTrials;i++){
             percolation = new Percolation(n);
-            collectionOfTrials = new double[totalTrials];
-
             callPercolation(n, i);
             double ratioOfSites = 0;
             if(percolation.percolates() == true){
-                System.out.println("NUM" + percolation.numOfOpenSites);
-                System.out.println("TOTAL" + totalNumOfSites);
                 ratioOfSites = percolation.numOfOpenSites/totalNumOfSites;
-                System.out.println("RATIO" + ratioOfSites);
                 collectionOfTrials[i] = ratioOfSites;
             }
         }
-        System.out.println(percolation.numOfOpenSites);
     }
 
 //         test client (see below)
     public static void main(String[] args){
-        PercolationStats percStats = new PercolationStats(3, 10);
-        System.out.println("MEAN" + percStats.mean());
+        PercolationStats percolationStats = new PercolationStats(100, 1000);
+        System.out.println(percolationStats.mean());
+        percolationStats.mean();
     }
 
     private void callPercolation(int n, int i){
         while(percolation.percolates() != true){
-//            System.out.println("CALLING...");
             percolation.open(StdRandom.uniform(n), StdRandom.uniform(n));
         }
     }
 
 // sample mean of percolation threshold
     public double mean(){
-        System.out.println("COL1" + collectionOfTrials[0]);
-        System.out.println("COL2" + collectionOfTrials[1]);
-        System.out.println("COL3" + collectionOfTrials[2]);
-        System.out.println("COL4" + collectionOfTrials[3]);
-        System.out.println("COL5" + collectionOfTrials[4]);
-        System.out.println("COL6" + collectionOfTrials[5]);
-        System.out.println("COL7" + collectionOfTrials[6]);
-        System.out.println("COL8" + collectionOfTrials[7]);
-        System.out.println("COL9" + collectionOfTrials[8]);
-        System.out.println("COL10" + collectionOfTrials[9]);
         return StdStats.mean(collectionOfTrials);
     }
 

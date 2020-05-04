@@ -6,13 +6,9 @@ public class Percolation {
   static int sizeOfGrid;
   public int numOfOpenSites;
   private WeightedQuickUnionUF weightedQuickUnionUF;
-  private int currentRow;
-  private int currentCol;
 
   // creates n-by-n grid, with all sites initially blocked
   public Percolation(int n){
-    currentRow = 0;
-    currentCol = 0;
     if (n <= 0) {
       throw new IllegalArgumentException("n must be greater than 0");
     }
@@ -28,8 +24,6 @@ public class Percolation {
 
   // opens the site (row, col) if it is not open already
   public void open(int row, int col){
-    currentRow = row;
-    currentCol = col;
     int p = mapCellValueToUnionFindModel(row, col);
     if(!isOpen(row, col)) {
       numOfOpenSites += 1;
@@ -64,7 +58,7 @@ public class Percolation {
   public boolean isFull(int row, int col){
     int connection = 0;
     for(int i=0; i<sizeOfGrid; i++){
-      if(grid[currentRow][currentCol] == grid[0][i]){
+      if(grid[row][col] == grid[0][i]){
         connection+=1;
       }
     }
@@ -78,9 +72,7 @@ public class Percolation {
   public boolean percolates(){
     int connection = 0;
     for(int i=0; i<sizeOfGrid; i++){
-      if(isFull(sizeOfGrid-1,i) && grid[sizeOfGrid-1][i] != -1){
-        System.out.println("size" + sizeOfGrid);
-        System.out.println("I" + i);
+      if(isFull(sizeOfGrid-1, i) && grid[sizeOfGrid-1][i] > -1){
         connection+=1;
       }
     }
